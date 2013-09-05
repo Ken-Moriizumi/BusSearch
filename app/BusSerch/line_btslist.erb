@@ -1,0 +1,29 @@
+<div data-role="page" <%= setthemes %>>
+  <div data-role="header" data-position="inline">
+          <h1>バス停をえらぶ</h1>
+          <%= navifooter(@strorstp) %>
+  </div>
+
+  <div data-role="content">
+    <% if @linehash.size != 0 then %>
+    <div data-role="collapsible-set">
+        <% @linehash.each do |key,bts| %>
+        <div data-role="collapsible" data-collapsed="true">
+        <h3><%= key %></h3>
+        <ul data-role="listview" data-filter="true" data-autodividers="true">
+        <% bts.each do |bt| %>
+                <li><a href="<%= url_for :action => :index, :query =>{:strorstp => @strorstp, :bts => bt} %>"><span style="display:none;"><%= bt %></span><%= bt %></a></li>
+        <% end %>
+        </ul>
+        </div>
+        <% end %>
+    </div>
+    <% else %>
+       検索結果はありませんでした。
+    <% end %>
+  </div>
+  <div data-role="footer">
+          <%= putimobileCms %>
+  </div>
+
+</div>

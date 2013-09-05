@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+encoding//app/BusSerch/busstplist.erb=UTF-8
+encoding//app/BusSerch/get_json.erb=UTF-8
+encoding//app/BusSerch/index.erb=UTF-8
+encoding//app/BusSerch/info.erb=UTF-8
+encoding//app/BusSerch/line_btslist.erb=UTF-8

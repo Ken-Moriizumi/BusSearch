@@ -1,0 +1,92 @@
+<div data-role="page" <%= setthemes %>>
+
+  <div data-role="header" data-position="inline">
+    <h1>バスの時刻をしらべる</h1>
+  </div>
+
+  <div data-role="content">
+    <form method="POST" action="<%= url_for :action => :get_json %>">
+      <input type="hidden" name="id" value="serch-busstops" />
+
+      
+          <div data-role="fieldcontain">
+            <label for="start_busstopnm" class="fieldLabel "><div align="right"><img src="/public/images/bus_start_36px.png" ></div></label>
+            <input type="text" onClick="Call_Startbusstops()" id="start_busstopnm" name="start_busstopnm" <%= placeholder("出発バス停") %> value="<%= @startbts %>" readonly/>
+
+          </div>
+          <div data-role="fieldcontain">
+            <label for="arrival_busstopnm" class="fieldLabel "><div align="right"><img src="/public/images/bus_stop_36px.png" ></div></label>
+            <input type="text" onClick="Call_Stopbusstops()" id="arrival_busstopnm" name="arrival_busstopnm" <%= placeholder("降車バス停") %> value="<%= @stptbts %>" readonly/>
+          </div>
+          
+          <div data-role="fieldcontain" vartical-align="center">
+            <label for="timefield" class="fieldLabel "><div align="right"><img src="/public/images/watch_36px.png" ></div></label>
+      <input  href=""  onClick="Call_Picker()"  type="time" id="timefield" name="timefield"  value="<%= $session[:time] %>" readonly/>
+          </div>
+          <div data-role="fieldcontain"  >
+            <fieldset data-role="controlgroup"  data-type="horizontal" >
+                   	<input type="radio" name="arrordep" id="radio-arrordep-1" value="departure" checked="checked" <%= setthemes %>>
+                   	<label for="radio-arrordep-1">発</label>
+                   	<input type="radio" name="arrordep" id="radio-arrordep-2" value="arrival"  <%= setthemes %> />
+                   	<label for="radio-arrordep-2">着</label>
+           </fieldset>
+            <fieldset data-role="controlgroup"  >
+                   	<input type="radio" name="weekends" id="radio-choice-1" value="false" checked="checked" <%= setthemes %>/>
+                   	<label for="radio-choice-1">平日ダイヤでしらべる</label>
+                   	<input type="radio" name="weekends" id="radio-choice-2" value="true" <%= setthemes %>/>
+                   	<label for="radio-choice-2">休日ダイヤでしらべる</label>
+            </fieldset>
+           </div>
+          
+
+           <!--<BUTTON type="button" onclick="DisableButton(this);" value="検索"></BUTTON>-->
+      <BUTTON type="submit" onclick="DisableButton(this);" value="検索"></BUTTON>
+      <!--<input type="submit" value="検索" onclick="DisableButton(this);" />-->
+    </form>
+  </div>
+  <div data-role="footer" data-position="fixed">
+       <%= putimobileCms %>
+  </div>
+
+  <script type="text/javascript">
+    
+  function DisableButton(pObj) {
+     pObj.disabled = true;
+     pObj.value = '送信中';
+     pObj.form.submit();
+     $.mobile.pageLoading();
+    }
+
+    function myClick(){
+       $.mobile.pageLoading();
+    }
+
+    function Call_Picker(){
+      $.get('<%= url_for(:action => :choose) %>', {flg: 2})
+      return false
+    }
+
+    function Call_Startbusstops(){
+      //document.location = '<%= url_for( :action => :busstplist , :query =>{:strorstp => "strbts"}) %>';
+      document.location = '<%= url_for( :action => :geolication , :query =>{:strorstp => "strbts"}) %>';
+      return false
+    }
+
+    function Call_Stopbusstops(){
+      //document.location = '<%= url_for( :action => :busstplist , :query =>{:strorstp => "stpbts"}) %>';
+      document.location = '<%= url_for( :action => :geolication , :query =>{:strorstp => "stpbts"}) %>';
+      return false
+    }
+
+    function Time_Picker_Set(time){
+      document.getElementById("timefield").value = time
+    }
+
+    function SetTime(time){
+      $('span.time_field').html(time);
+     }
+    
+    
+  </script>
+
+</div>

@@ -1,0 +1,35 @@
+#sdk: "/Users/Ryota/.rvm/gems/ruby-1.9.3-p194@rhodes/gems/rhodes-3.3.3"
+sdkversion: "3.3.3"
+name: "ALBus"
+version: "1.0.3"
+vendor: "rhomobile"
+#build: debug
+bbver: 4.6
+applog: "rholog.txt"
+iphone:
+  configuration: "Release"
+  sdk: "iphonesimulator5.0"
+  provisionprofile: 
+  codesignidentity: 
+  entitlements: 
+#  BundleIdentifier: com.rhomobile.jsontest
+  BundleIdentifier: "com.rhomobile.busserch"
+#  BundleURLScheme: jsontest
+  BundleURLScheme: "busserch"
+wp:
+  productid: "efda6eb0-bcd6-012f-2512-3c07542aa8a3"
+symbian:
+  uid: "0xefe9abb6"
+android:
+#  version: 2.1
+  version: "4.0.3"
+  production:
+#  certificate: path/to/your/developer/certificate
+    password: "moriken2"
+    alias: "keystore.alias"
+  emulator: "rhodesdebug"
+capabilities:
+  - gps
+extensions:
+  - json
+  - another-extension

@@ -1,0 +1,34 @@
+<div data-role="page" <%= setthemes %>>
+  <div data-role="header" data-position="inline">
+    <h1>検索結果</h1>
+    <a href="<%= url_for :action => :index %>" class="ui-btn-left" data-icon="arrow-l" data-direction="reverse">
+      戻る
+    </a>
+  </div>
+
+  <div data-role="content">
+    <% if @busary.size != 0 then %>
+    <div align="center">
+      <img src="/public/images/lines_muji.png" ><img src="/public/images/bus_to_right_70per.jpg" ><br><br>
+    </div>
+       <ul data-role="listview" >
+         <li data-role="list-divider"><img src="/public/images/startbusstop_40px.png" alt="start" class="ui-li-icon">　　乗車バス停　<%=  @busary[0][0] %>
+                                 <br>　　乗車時刻：<%= @busary[0][1] %>
+                                 <br>　　路線：<%= @busary[0][2] %></li>
+<div align="left">
+<img src="/public/images/down.png"  align="middle">
+</div>
+         <li data-role="list-divider"><img src="/public/images/goalbusstop_40px.png" alt="start" class="ui-li-icon">　　降車バス停　<%=  @busary[1][0] %>
+                                 <br>　　降車時刻：<%= @busary[1][1] %>
+                                 <br>　　路線：<%= @busary[1][2] %></li>
+       </ul>
+
+    <% else %>
+       検索結果はありませんでした。
+    <% end %>
+  </div>
+  <div data-role="footer" data-position="fixed">
+          <%= putimobileCms %>
+  </div>
+
+</div>

@@ -1,0 +1,22 @@
+<div data-role="page" <%= setthemes %>>
+  <div data-role="header" data-position="inline">
+          <h1>バス停をえらぶ</h1>
+          <%= navifooter(@strorstp) %>
+  </div>
+
+  <div data-role="content">
+    <% if @busary.size != 0 then %>
+    <ul data-role="listview" data-filter="true" data-autodividers="true">
+        <% @busary.each do |bts| %>
+                <li><a href="<%= url_for :action => :index, :query =>{:strorstp => @strorstp, :bts => bts[0]} %>"><span style="display:none;"><%= bts[0] %></span><%= bts[0] %></a></li>
+        <% end %>
+    </ul>
+    <% else %>
+       検索結果はありませんでした。
+    <% end %>
+  </div>
+  <div data-role="footer" >
+      <%= putimobileCms %>
+  </div>
+
+</div>
