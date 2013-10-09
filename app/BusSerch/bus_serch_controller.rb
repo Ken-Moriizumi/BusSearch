@@ -39,20 +39,12 @@ class BusSerchController < Rho::RhoController
     @lat = GeoLocation.latitude
     #経度の取得
     @lng = GeoLocation.longitude
-    if $session["busstpgpslist"].nil? then
-       http = Rho::AsyncHttp.get(
-               # アクセス時にヘッダ情報を日本語にする。
-               :headers => {"Accept-Language" => "ja"},
-               #:url => "http://maps.google.com/maps/api/geocode/json?latlng=#{lat},#{lon}&sensor=false"
-               :url => "http://www9264ui.sakura.ne.jp/busstops/result_bts_lines"
-       )
-       $session["busstpgpslist"] = http
-    else
-        http = $session["busstpgpslist"]
-    end
-    if http["status"] == "ok"
+
+    geturl = "/busstops/result_bts_lines"
+      
+    if result_session("busstpgpslist",geturl) ["status"] == "ok"
       # HTTPのbodyには、JSON解析されたHashの値が入る。
-      body = http["body"] 
+      body = result_session("busstpgpslist",geturl) ["body"] 
       busstops = body["busstops"]
       @busary = Array.new
       busstops.each {|bsp|
@@ -68,25 +60,11 @@ class BusSerchController < Rho::RhoController
     
   def busstplist
     @strorstp = @params["strorstp"]
-    if $session["busstplist"].nil? then
-       http = Rho::AsyncHttp.get(
-               # アクセス時にヘッダ情報を日本語にする。
-               :headers => {"Accept-Language" => "ja"},
-               #:url => "http://maps.google.com/maps/api/geocode/json?latlng=#{lat},#{lon}&sensor=false"
-               :url => "http://www9264ui.sakura.ne.jp/busstops/result"
-       )
-       $session["busstplist"] = http
-    else
-        http = $session["busstplist"]
-    end
-    if http["status"] == "ok"
+    geturl = "/busstops/result"
+
+    if result_session("busstplist",geturl)["status"] == "ok"
       # HTTPのbodyには、JSON解析されたHashの値が入る。
-      body = http["body"]
-      #@address = body["results"].first["formatted_address"]
-      #puts "hogehoge log!"
-      #puts http["body"].to_s
-      #p body["diagrams"].first["diagram"]
-      p @params
+      body = result_session("busstplist",geturl)["body"]
 
       busstops = body["bussstops"]
       @busary = Array.new
@@ -109,18 +87,10 @@ class BusSerchController < Rho::RhoController
    p @params 
     @strorstp = @params["strorstp"]
 
-    if $session["busstplist_line"].nil? then
-            http = Rho::AsyncHttp.get(
-                    :headers => {"Accept-Language" => "ja"},
-                    :url => "http://www9264ui.sakura.ne.jp/busstops/result_lines_bts"
-            )
-       $session["busstplist_line"] = http
-    else
-       http = $session["busstplist_line"]
-    end
-    if http["status"] == "ok"
+    geturl = "/busstops/result_lines_bts"
+    if result_session("busstplist_line",geturl)["status"] == "ok"
       # HTTPのbodyには、JSON解析されたHashの値が入る。
-      body = http["body"]
+      body = result_session("busstplist_line",geturl)["body"]
 
       line_bts = body["line_bts"]
       @linehash = Hash.new
@@ -151,25 +121,14 @@ class BusSerchController < Rho::RhoController
     p avlbus
     p timepara
 
-    geturl = "http://www9264ui.sakura.ne.jp/diagrams/result?start_busstopnm=#{strbus}&arrival_busstopnm=#{avlbus}&#{timepara}"
+    geturl = "/diagrams/result?start_busstopnm=#{strbus}&arrival_busstopnm=#{avlbus}&#{timepara}"
     if @params['weekends'] == "true" then
         geturl << "&weekend=1"
     end
-    http = Rho::AsyncHttp.get(
-      # アクセス時にヘッダ情報を日本語にする。
-      :headers => {"Accept-Language" => "ja"},
-      #:url => "http://maps.google.com/maps/api/geocode/json?latlng=#{lat},#{lon}&sensor=false"
-      :url => geturl
-    )
-    if http["status"] == "ok"
+    if rest_request(geturl)["status"] == "ok"
       # HTTPのbodyには、JSON解析されたHashの値が入る。
-      body = http["body"]
-      #@address = body["results"].first["formatted_address"]
-      #puts "hogehoge log!"
-      #puts http["body"].to_s
-      #p body["diagrams"].first["diagram"]
-      p @params
-
+      body = rest_request(geturl)["body"]
+ 
       busstops = body["diagrams"]
       @busary = Array.new
       busstops.each {|bsp|
@@ -240,5 +199,21 @@ class BusSerchController < Rho::RhoController
     end
     WebView.navigate(url_for(:action => :index))
   end
-
+  
+private
+    def rest_request(geturl)
+      host = "http://www9264ui.sakura.ne.jp"
+      #host = "http://localhost:3000"
+      @http ||= begin 
+        Rho::AsyncHttp.get(
+           # アクセス時にヘッダ情報を日本語にする。
+           :headers => {"Accept-Language" => "ja"},
+           :url => host + geturl
+        )
+      end
+    end
+    
+    def result_session(name,geturl)
+      $session[name] ||= rest_request(geturl)
+    end
 end
